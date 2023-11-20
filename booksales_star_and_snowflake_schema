@@ -1,3 +1,4 @@
+-- Add foreign keys to booksales database with star schema
 -- Add the book_id foreign key
 ALTER TABLE fact_booksales ADD CONSTRAINT sales_book
     FOREIGN KEY (book_id) REFERENCES dim_book_star (book_id);
@@ -9,3 +10,49 @@ ALTER TABLE fact_booksales ADD CONSTRAINT sales_time
 -- Add the store_id foreign key
 ALTER TABLE fact_booksales ADD CONSTRAINT sales_store
     FOREIGN KEY (store_id) REFERENCES dim_store_star (store_id);
+
+-- Extend star shema to create snowflake schema
+-- Create a new table for dim_author with an author column
+CREATE TABLE dim_author (
+    author varchar(256)  NOT NULL
+);
+
+-- Insert authors 
+INSERT INTO dim_author
+SELECT DISTINCT author FROM dim_book_star;
+
+-- Add a primary key 
+ALTER TABLE dim_author ADD COLUMN author_id SERIAL PRIMARY KEY;
+
+-- Output the new table
+SELECT * FROM dim_author;
+
+-- Create a new table for dim_publisher with a publisher column
+CREATE TABLE dim_publisher (
+    publisher varchar(256)  NOT NULL
+);
+
+-- Insert publishers 
+INSERT INTO dim_publisher
+SELECT DISTINCT publisher FROM dim_book_star;
+
+-- Add a primary key 
+ALTER TABLE dim_publisher ADD COLUMN publisher_id SERIAL PRIMARY KEY;
+
+-- Output the new table
+SELECT * FROM dim_publisher;
+
+-- Create a new table for dim_genre with a genre column
+CREATE TABLE dim_genre (
+    genre varchar(256)  NOT NULL
+);
+
+-- Insert genres
+INSERT INTO dim_genre
+SELECT DISTINCT genre FROM dim_book_star;
+
+-- Add a primary key 
+ALTER TABLE dim_genre ADD COLUMN genre_id SERIAL PRIMARY KEY;
+
+-- Output the new table
+SELECT * FROM dim_genre;
