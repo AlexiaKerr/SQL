@@ -1,4 +1,4 @@
--- Add foreign keys to booksales database with star schema
+-- Add foreign keys to booksales database for star schema
 -- Add the book_id foreign key
 ALTER TABLE fact_booksales ADD CONSTRAINT sales_book
     FOREIGN KEY (book_id) REFERENCES dim_book_star (book_id);
@@ -56,3 +56,16 @@ ALTER TABLE dim_genre ADD COLUMN genre_id SERIAL PRIMARY KEY;
 
 -- Output the new table
 SELECT * FROM dim_genre;
+
+-- Add foreign keys to new tables to connect snowflake schema
+-- Add the author foreign key
+ALTER TABLE dim_author ADD CONSTRAINT book_author
+    FOREIGN KEY (author) REFERENCES dim_book_star (author);
+    
+-- Add the publisher foreign key
+ALTER TABLE dim_publisher ADD CONSTRAINT book_publisher
+    FOREIGN KEY (publisher) REFERENCES dim_time_star (publisher);
+    
+-- Add the genre foreign key
+ALTER TABLE dim_genre ADD CONSTRAINT book_genre
+    FOREIGN KEY (genre) REFERENCES dim_store_star (genre);
